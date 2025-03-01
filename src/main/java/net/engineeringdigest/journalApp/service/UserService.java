@@ -1,8 +1,11 @@
 package net.engineeringdigest.journalApp.service;
 
+import lombok.extern.slf4j.Slf4j;
 import net.engineeringdigest.journalApp.entity.User;
 import net.engineeringdigest.journalApp.repository.UserRepository;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,18 +16,33 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class UserService
 {
     @Autowired
     UserRepository userRepository;
     private static final PasswordEncoder passwordEncoder= new BCryptPasswordEncoder();
 
+   // private final static Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    public void saveNewUser(User user)
+
+    public boolean saveNewUser(User user)
     {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles(Arrays.asList("USER"));
-        userRepository.save(user);
+        try {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setRoles(Arrays.asList("USER"));
+            userRepository.save(user);
+            return true;
+        }
+        catch(Exception e)
+        {
+            //logger.info("hahahha");
+            log.info("Printing logger using SLF4j",e);
+            log.warn("duplicate data");
+            log.error("Testing");
+            //log.debug("Customising");
+            return false;
+        }
     }
     public void saveAdmin(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));

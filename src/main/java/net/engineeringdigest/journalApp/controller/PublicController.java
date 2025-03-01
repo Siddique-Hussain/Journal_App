@@ -17,10 +17,10 @@ public class PublicController
         return "okay";
     }
 
-    @PostMapping("/create_user")
+    @PostMapping("/create-user")
     public void createUser(@RequestBody User user)
     {
-        userService.saveNewUser(user);
+          userService.saveNewUser(user);
 
     }
 }
